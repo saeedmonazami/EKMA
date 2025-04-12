@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ثبت مشخصات بیمار و آزمون M.M.S.E</title>
+  <style>
+    body { font-family: Arial, sans-serif; direction: rtl; margin: 20px; }
+    label { display: block; margin-top: 10px; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 5px; }
+    .section { margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h2>ثبت مشخصات بیمار</h2>
+  <form id="patientForm" action="https://n8n-render-4-ilpc.onrender.com/webhook-test/receive-patient" method="POST">
+    <div class="section">
+      <label for="fullName">نام کامل:</label>
+      <input type="text" id="fullName" name="fullName" required>
+      
+      <label for="age">سن:</label>
+      <input type="number" id="age" name="age" required>
+      
+      <label for="examDate">تاریخ معاینه:</label>
+      <input type="date" id="examDate" name="examDate" required>
+      
+      <label for="doctorName">نام پزشک معاینه:</label>
+      <input type="text" id="doctorName" name="doctorName" required>
+    </div>
+    
+    <h2>آزمون M.M.S.E</h2>
+    <div class="section">
+      <!-- سوالات آزمون: می‌توانید سوالات مورد نظر را در اینجا وارد کنید -->
+      <label for="q1">1. امسال چه سالی است؟</label>
+      <input type="text" id="q1" name="answers[1]" required>
+      
+      <label for="q2">2. چه فصلی است؟</label>
+      <input type="text" id="q2" name="answers[2]" required>
+      
+      <label for="q3">3. چه ماهی از سال است؟</label>
+      <input type="text" id="q3" name="answers[3]" required>
+      
+      <label for="q4">4. چه روزی از هفته است؟</label>
+      <input type="text" id="q4" name="answers[4]" required>
+      
+      <label for="q5">5. تاریخ را بگو:</label>
+      <input type="text" id="q5" name="answers[5]" required>
+    </div>
+    
+    <!-- می‌توانید سوالات بیشتری از فایل PDF اضافه کنید -->
+    
+    <button type="submit">ارسال اطلاعات</button>
+  </form>
+</body>
+</html>
