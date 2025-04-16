@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- تغییر سیاست referrer به no-referrer -->
+  <meta name="referrer" content="no-referrer">
   <title>ثبت مشخصات بیمار و آزمون M.M.S.E</title>
   <!-- اضافه کردن فونت وزیر -->
   <link href="https://fonts.googleapis.com/css?family=Vazir&display=swap" rel="stylesheet">
@@ -134,10 +136,10 @@
       feedbackDiv.textContent = 'در حال ارسال اطلاعات...';
       feedbackDiv.className = 'feedback';
       
-      // استفاده از fetch برای ارسال داده‌ها به سمت وبهوک
+      // ارسال داده‌ها به وسیله fetch
       fetch(this.action, {
         method: 'POST',
-        body: formData,
+        body: formData
       })
       .then(response => response.json())
       .then(data => {
