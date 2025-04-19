@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- تغییر سیاست referrer به no-referrer -->
   <meta name="referrer" content="no-referrer">
   <title>ثبت مشخصات بیمار و آزمون M.M.S.E</title>
+  <!-- اضافه کردن فونت وزیر -->
   <link href="https://fonts.googleapis.com/css?family=Vazir&display=swap" rel="stylesheet">
   <style>
     body {
@@ -63,6 +65,7 @@
       border-radius: 4px;
       background-color: #fafafa;
     }
+    /* استایل پیام‌های بازخورد */
     .feedback {
       margin-top: 15px;
       font-size: 1em;
@@ -99,5 +102,53 @@
         <input type="text" id="doctorName" name="doctorName" placeholder="نام پزشک را وارد کنید" required>
       </fieldset>
       
-      <fieldset class="
-
+      <fieldset class="section">
+        <legend>آزمون M.M.S.E</legend>
+        <label for="q1">1. امسال چه سالی است؟</label>
+        <input type="text" id="q1" name="answers[1]" placeholder="پاسخ خود را وارد کنید" required>
+        
+        <label for="q2">2. چه فصلی است؟</label>
+        <input type="text" id="q2" name="answers[2]" placeholder="پاسخ خود را وارد کنید" required>
+        
+        <label for="q3">3. چه ماهی از سال است؟</label>
+        <input type="text" id="q3" name="answers[3]" placeholder="پاسخ خود را وارد کنید" required>
+        
+        <label for="q4">4. چه روزی از هفته است؟</label>
+        <input type="text" id="q4" name="answers[4]" placeholder="پاسخ خود را وارد کنید" required>
+        
+        <label for="q5">5. تاریخ را بگو:</label>
+        <input type="text" id="q5" name="answers[5]" placeholder="پاسخ خود را وارد کنید" required>
+      </fieldset>
+      
+      <button type="submit">ارسال اطلاعات</button>
+      <div id="feedback" class="feedback"></div>
+    </form>
+  </div>
+  
+  <!-- اسکریپت برای ارسال فرم به صورت Ajax و نمایش پیام بازخورد -->
+  <script>
+    document.getElementById('patientForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // جلوگیری از ارسال پیش‌فرض فرم
+      
+      const formData = new FormData(this);
+      const feedbackDiv = document.getElementById('feedback');
+      feedbackDiv.style.display = 'block';
+      feedbackDiv.textContent = 'در حال ارسال اطلاعات...';
+      feedbackDiv.className = 'feedback';
+      
+      // ارسال داده‌ها به وسیله fetch
+      fetch(this.action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        feedbackDiv.textContent = 'اطلاعات با موفقیت ارسال شد.';
+        feedbackDiv.classList.add('success');
+      })
+      .catch(error => {
+        feedbackDiv.textContent = 'خطایی در ارسال اطلاعات رخ داده است.';
+        feedbackDiv.classList.add('error');
+        console.error('Error:', error);
+      });
+    });
