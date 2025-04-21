@@ -1,0 +1,83 @@
+<!-- فایل: step2.html - فرم مرحله دوم -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>مرحله ۲ - آپلود MRI</title>
+</head>
+<body>
+  <h2>مرحله ۲: آپلود تصویر MRI بیمار</h2>
+  <form id="mriForm">
+    <label for="mriFile">فایل MRI را انتخاب کنید:</label>
+    <input type="file" id="mriFile" name="mri" accept="image/*" required /><br><br>
+    <!-- با accept فقط امکان انتخاب فایل‌های تصویری وجود دارد&#8203;:contentReference[oaicite:5]{index=5} -->
+    
+    <button type="submit">ارسال MRI</button>
+  </form>
+  
+  <!-- محل نمایش وضعیت آپلود -->
+  <div id="status" style="margin-top: 1em;"></div>
+  
+  <script>
+    const apiUrl = "https://YOUR-FLASK-API-URL/upload";  // آدرس Endpoint مربوط به آپلود در سرویس Flask روی Render
+    
+    const mriForm = document.getElementById('mriForm');
+    const statusDiv = document.getElementById('status');
+    
+    mriForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      statusDiv.textContent = ""; // پاک کردن پیام قبلی
+      statusDiv.style.color = "black";
+      
+      const fileInput = document.getElementById('mriFile');
+      const files = fileInput.files;
+      if (!files || files.length === 0) {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = "لطفاً یک فایل MRI انتخاب کنید.";
+        return;
+      }
+      
+      const file = files[0];
+      // بررسی اولیه نوع فایل بر اساس MIME type
+      if (file.type && !file.type.startsWith("image/")) {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = "فرمت فایل معتبر نیست. لطفاً یک تصویر معتبر انتخاب کنید.";
+        return;
+      }
+      // (در صورت نیاز می‌توان بررسی پسوند فایل یا سایر اعتبارسنجی‌ها را نیز افزود)
+      
+      // می‌توان محدودیت حجم فایل را نیز بررسی کرد (مثلاً حداکثر چند MB)
+      const maxSizeMB = 5;  // حداکثر حجم ۵ مگابایت به عنوان نمونه
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = "حجم فایل بیش از حد بزرگ است. لطفاً فایل کوچکتری انتخاب کنید.";
+        return;
+      }
+      
+      // آماده‌سازی داده‌ها برای ارسال (با FormData)
+      const formData = new FormData();
+      formData.append("file", file);
+      
+      // ارسال فایل به سرور Flask
+      fetch(apiUrl, {
+        method: "POST",
+        body: formData
+        // header Content-Type را تنظیم نکنید؛ مرورگر خود این کار را انجام می‌دهد&#8203;:contentReference[oaicite:6]{index=6}.
+      })
+      .then(response => {
+        if (response.ok) {
+          statusDiv.style.color = "green";
+          statusDiv.textContent = "✅ MRI دریافت شد.";  // نمایش پیام موفقیت
+        } else {
+          statusDiv.style.color = "red";
+          statusDiv.textContent = "❌ خطا در آپلود MRI. لطفاً دوباره تلاش کنید.";
+        }
+      })
+      .catch(error => {
+        statusDiv.style.color = "red";
+        statusDiv.textContent = "❌ آپلود انجام نشد. اتصال اینترنت یا سرویس را بررسی کنید.";
+      });
+    });
+  </script>
+</body>
+</html>
