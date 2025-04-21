@@ -1,58 +1,143 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مرحله ۱: اطلاعات بیمار و آزمون M.M.S.E</title>
-  <link href="https://fonts.googleapis.com/css?family=Vazir&display=swap" rel="stylesheet">
+  <title>آزمون MMSE</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { font-family: 'Vazir', sans-serif; direction: rtl; background: #f8f8f8; margin:0; }
-    .container { max-width:600px; margin:40px auto; background:#fff; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.1); border-radius:8px; }
-    h2 { text-align:center; color:#333; margin-bottom:20px; }
-    label { display:block; margin-top:15px; color:#555; }
-    input { width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
-    button { margin-top:20px; padding:12px; background:#28a745; color:#fff; border:none; border-radius:4px; cursor:pointer; width:100%; }
-    button:hover { background:#218838; }
-    .feedback { margin-top:15px; text-align:center; padding:8px; border-radius:4px; display:none; }
-    .feedback.success { background:#d4edda; color:#155724; }
-    .feedback.error   { background:#f8d7da; color:#721c24; }
+    body { background-color: #f9fafb; }
+    .container { max-width: 800px; margin-top: 40px; }
+    .form-section { padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,.1); margin-bottom: 20px; }
+    .form-section h4 { color: #007bff; }
+    .btn-submit { background-color: #007bff; color: #fff; }
+    .feedback { display: none; margin-top: 15px; padding: 10px; border-radius: 4px; text-align: center; }
+    .feedback.success { background: #d4edda; color: #155724; }
+    .feedback.error   { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
+
   <div class="container">
-    <h2>مرحله ۱: اطلاعات بیمار و آزمون M.M.S.E</h2>
-    <form id="patientForm" action="https://n8n-render-1-xacg.onrender.com/webhook/receive-patient" method="POST">
-      <label for="name">نام بیمار:</label>
-      <input type="text" id="name" name="name" required>
-      
-      <label for="age">سن:</label>
-      <input type="number" id="age" name="age" required min="0">
-      
-      <label for="mmse">نمره M.M.S.E:</label>
-      <input type="number" id="mmse" name="mmse_score" required min="0" max="30">
-      
-      <button type="submit">ارسال اطلاعات</button>
-      <div id="feedback" class="feedback"></div>
-    </form>
+    <div class="form-section">
+      <h4 class="text-center mb-4">آزمون کوتاه وضعیت روانی (MMSE)</h4>
+      <form id="patientForm"
+            action="https://n8n-render-1-xacg.onrender.com/webhook/receive-patient"
+            method="POST">
+        
+        <!-- بخش اطلاعات اولیه -->
+        <div class="mb-3">
+          <label class="form-label">نام بیمار:</label>
+          <input type="text" name="fullName" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">سن بیمار:</label>
+          <input type="number" name="age" class="form-control" required min="0">
+        </div>
+        <div class="mb-3">
+          <label class="form-label">میزان تحصیلات:</label>
+          <input type="text" name="education" class="form-control" required>
+        </div>
+
+        <!-- بخش آگاهی به زمان -->
+        <h5>آگاهی به زمان</h5>
+        <div class="mb-3">
+          <label class="form-label">امسال چه سالی است؟</label>
+          <input type="text" name="time_year" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">چه فصلی است؟</label>
+          <input type="text" name="time_season" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">چه ماهی از سال است؟</label>
+          <input type="text" name="time_month" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">چه روزی از هفته است؟</label>
+          <input type="text" name="time_weekday" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">تاریخ دقیق امروز را بگویید:</label>
+          <input type="text" name="time_date" class="form-control" required>
+        </div>
+
+        <!-- بخش آگاهی به مکان -->
+        <h5>آگاهی به مکان</h5>
+        <div class="mb-3">
+          <label class="form-label">ما الان کجا هستیم؟</label>
+          <input type="text" name="place_general" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">نام شهر/شهرستان/استان:</label>
+          <input type="text" name="place_city" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">نام کشور:</label>
+          <input type="text" name="place_country" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">نام بیمارستان/درمانگاه:</label>
+          <input type="text" name="place_clinic" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">طبقه/شماره اتاق:</label>
+          <input type="text" name="place_room" class="form-control" required>
+        </div>
+
+        <!-- بخش توجه و محاسبه -->
+        <h5>توجه و محاسبه</h5>
+        <div class="mb-3">
+          <label class="form-label">از ۱۰۰ هفت‌تا هفت‌تا کم کنید:</label>
+          <input type="text" name="attention_subtract" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">لغت «گلدان» را وارونه هجی کنید:</label>
+          <input type="text" name="attention_spell" class="form-control" required>
+        </div>
+
+        <!-- بخش نوشتن جمله -->
+        <h5>نوشتن جمله</h5>
+        <div class="mb-3">
+          <label class="form-label">یک جمله دربارهٔ وضع هوا بنویسید:</label>
+          <textarea name="write_sentence" class="form-control" rows="3" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-submit w-100">ارسال پاسخ‌ها</button>
+        <div id="feedback" class="feedback"></div>
+      </form>
+    </div>
   </div>
-  
+
   <script>
     const form = document.getElementById('patientForm');
-    const fb   = document.getElementById('feedback');
+    const feedback = document.getElementById('feedback');
+
     form.addEventListener('submit', e => {
       e.preventDefault();
-      fb.style.display = 'block';
-      fb.textContent = 'در حال ارسال...';
-      fb.className = 'feedback';
-      fetch(form.action, { method:'POST', body:new FormData(form) })
-        .then(res => res.ok
-          ? (fb.textContent='ارسال موفق! در حال انتقال...', fb.classList.add('success'), setTimeout(()=>location.href='step2.html',1000))
-          : (fb.textContent='خطا در ارسال؛ دوباره تلاش کنید.', fb.classList.add('error'))
-        )
-        .catch(()=>{
-          fb.textContent='مشکل اتصال؛ اینترنت را بررسی کنید.'; fb.classList.add('error');
-        });
+      feedback.style.display = 'block';
+      feedback.textContent = 'در حال ارسال...';
+      feedback.className = 'feedback';
+
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+      })
+      .then(res => {
+        if (!res.ok) throw new Error(res.statusText);
+        return res.json();
+      })
+      .then(data => {
+        feedback.textContent = 'اطلاعات با موفقیت ارسال شد.';
+        feedback.classList.add('success');
+      })
+      .catch(err => {
+        feedback.textContent = 'خطا در ارسال؛ دوباره تلاش کنید.';
+        feedback.classList.add('error');
+        console.error(err);
+      });
     });
   </script>
+
 </body>
 </html>
