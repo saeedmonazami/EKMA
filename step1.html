@@ -1,0 +1,65 @@
+<!-- فایل: step1.html - فرم مرحله اول -->
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <title>مرحله ۱ - اطلاعات بیمار</title>
+</head>
+<body>
+  <h2>مرحله ۱: اطلاعات بیمار و آزمون M.M.S.E</h2>
+  <form id="patientForm">
+    <label for="name">نام بیمار:</label>
+    <input type="text" id="name" name="name" required /><br><br>
+    
+    <label for="age">سن:</label>
+    <input type="number" id="age" name="age" required /><br><br>
+    
+    <label for="mmse">نمره M.M.S.E:</label>
+    <input type="number" id="mmse" name="mmse_score" required /><br><br>
+    <!-- در صورت نیاز می‌توان به‌جای نمره، جزئیات پاسخ‌ها را نیز دریافت کرد -->
+    
+    <button type="submit">ارسال اطلاعات</button>
+  </form>
+  
+  <!-- محل نمایش پیام موفقیت/خطا -->
+  <div id="message" style="color: red; margin-top: 1em;"></div>
+  
+  <script>
+    const webhookUrl = "https://YOUR-N8N-WEBHOOK-URL";  // وب‌هوک n8n یا آدرس سرور AI Agent
+    
+    const form = document.getElementById('patientForm');
+    const messageDiv = document.getElementById('message');
+    
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();  // جلوگیری از رفتار پیش‌فرض ارسال فرم
+      messageDiv.textContent = "";  // پاک کردن پیام قبلی
+      
+      // تهیه شیء FormData از فرم جهت ارسال داده‌ها
+      const formData = new FormData(form);
+      
+      // ارسال داده‌ها به وب‌هوک با استفاده از Fetch
+      fetch(webhookUrl, {
+        method: "POST",
+        body: formData
+        // توجه: نیاز نیست header مربوط به Content-Type را تنظیم کنیم، 
+        // مرورگر به طور خودکار Content-Type مناسب multipart/form-data را همراه با boundary اضافه می‌کند&#8203;:contentReference[oaicite:2]{index=2}.
+      })
+      .then(response => {
+        if (response.ok) {
+          // در صورت موفقیت، هدایت به صفحه مرحله دوم
+          window.location.href = "step2.html";
+        } else {
+          // اگر سرور خطای HTTP برگرداند
+          messageDiv.style.color = "red";
+          messageDiv.textContent = "خطا در ارسال اطلاعات. لطفاً مجدداً تلاش کنید.";
+        }
+      })
+      .catch(error => {
+        // در صورت بروز خطا در ارتباط (مثلاً قطع شدن اینترنت)
+        messageDiv.style.color = "red";
+        messageDiv.textContent = "ارسال اطلاعات با مشکل مواجه شد. اتصال اینترنت خود را بررسی کنید.";
+      });
+    });
+  </script>
+</body>
+</html>
