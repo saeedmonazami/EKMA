@@ -1,83 +1,134 @@
-<!-- فایل: step2.html - فرم مرحله دوم -->
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <title>مرحله ۲ - آپلود MRI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>مرحله ۲: بارگذاری MRI</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: #eef2f7;
+      font-family: 'Vazir', sans-serif;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      margin: 60px auto;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      background: #fff;
+      border-bottom: none;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #0056b3;
+      text-align: center;
+      padding: 1rem;
+    }
+    .card-body {
+      background: #fff;
+      padding: 1.5rem;
+    }
+    .form-label {
+      font-weight: 500;
+      margin-bottom: .5rem;
+      color: #555;
+    }
+    #preview {
+      max-width: 100%;
+      margin-top: .5rem;
+      border-radius: 8px;
+      display: none;
+    }
+    .btn-primary {
+      background-color: #0056b3;
+      border: none;
+      padding: .75rem;
+      font-size: 1.1rem;
+    }
+    .btn-primary:hover {
+      background-color: #004494;
+    }
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      text-align: center;
+      padding: .75rem;
+      border-radius: .375rem;
+      font-weight: 500;
+    }
+    .feedback.success {
+      background-color: #d1e7dd;
+      color: #0f5132;
+    }
+    .feedback.error {
+      background-color: #f8d7da;
+      color: #842029;
+    }
+  </style>
 </head>
 <body>
-  <h2>مرحله ۲: آپلود تصویر MRI بیمار</h2>
-  <form id="mriForm">
-    <label for="mriFile">فایل MRI را انتخاب کنید:</label>
-    <input type="file" id="mriFile" name="mri" accept="image/*" required /><br><br>
-    <!-- با accept فقط امکان انتخاب فایل‌های تصویری وجود دارد&#8203;:contentReference[oaicite:5]{index=5} -->
-    
-    <button type="submit">ارسال MRI</button>
-  </form>
-  
-  <!-- محل نمایش وضعیت آپلود -->
-  <div id="status" style="margin-top: 1em;"></div>
-  
-  <script>
-    const apiUrl = "https://YOUR-FLASK-API-URL/upload";  // آدرس Endpoint مربوط به آپلود در سرویس Flask روی Render
-    
-    const mriForm = document.getElementById('mriForm');
-    const statusDiv = document.getElementById('status');
-    
-    mriForm.addEventListener('submit', function(event) {
-      event.preventDefault();
-      statusDiv.textContent = ""; // پاک کردن پیام قبلی
-      statusDiv.style.color = "black";
-      
-      const fileInput = document.getElementById('mriFile');
-      const files = fileInput.files;
-      if (!files || files.length === 0) {
-        statusDiv.style.color = "red";
-        statusDiv.textContent = "لطفاً یک فایل MRI انتخاب کنید.";
-        return;
-      }
-      
-      const file = files[0];
-      // بررسی اولیه نوع فایل بر اساس MIME type
-      if (file.type && !file.type.startsWith("image/")) {
-        statusDiv.style.color = "red";
-        statusDiv.textContent = "فرمت فایل معتبر نیست. لطفاً یک تصویر معتبر انتخاب کنید.";
-        return;
-      }
-      // (در صورت نیاز می‌توان بررسی پسوند فایل یا سایر اعتبارسنجی‌ها را نیز افزود)
-      
-      // می‌توان محدودیت حجم فایل را نیز بررسی کرد (مثلاً حداکثر چند MB)
-      const maxSizeMB = 5;  // حداکثر حجم ۵ مگابایت به عنوان نمونه
-      if (file.size > maxSizeMB * 1024 * 1024) {
-        statusDiv.style.color = "red";
-        statusDiv.textContent = "حجم فایل بیش از حد بزرگ است. لطفاً فایل کوچکتری انتخاب کنید.";
-        return;
-      }
-      
-      // آماده‌سازی داده‌ها برای ارسال (با FormData)
-      const formData = new FormData();
-      formData.append("file", file);
-      
-      // ارسال فایل به سرور Flask
-      fetch(apiUrl, {
-        method: "POST",
-        body: formData
-        // header Content-Type را تنظیم نکنید؛ مرورگر خود این کار را انجام می‌دهد&#8203;:contentReference[oaicite:6]{index=6}.
-      })
-      .then(response => {
-        if (response.ok) {
-          statusDiv.style.color = "green";
-          statusDiv.textContent = "✅ MRI دریافت شد.";  // نمایش پیام موفقیت
-        } else {
-          statusDiv.style.color = "red";
-          statusDiv.textContent = "❌ خطا در آپلود MRI. لطفاً دوباره تلاش کنید.";
-        }
-      })
-      .catch(error => {
-        statusDiv.style.color = "red";
-        statusDiv.textContent = "❌ آپلود انجام نشد. اتصال اینترنت یا سرویس را بررسی کنید.";
-      });
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">مرحله ۲: بارگذاری تصویر MRI</div>
+    <div class="card-body">
+      <form id="mriForm" action="https://mri-api.onrender.com/predict" method="POST" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label class="form-label" for="mriFile">انتخاب فایل MRI (JPEG/PNG)</label>
+          <input id="mriFile" name="mri" type="file" accept="image/*" class="form-control" required>
+          <img id="preview" alt="پیش‌نمایش تصویر">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">ارسال و تحلیل</button>
+      </form>
+      <div id="feedback" class="feedback"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const mriForm = document.getElementById('mriForm');
+  const fileInput = document.getElementById('mriFile');
+  const preview   = document.getElementById('preview');
+  const fb        = document.getElementById('feedback');
+
+  // نمایش پیش‌نمایش تصویر
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (!file) return preview.style.display = 'none';
+    const url = URL.createObjectURL(file);
+    preview.src = url;
+    preview.style.display = 'block';
+  });
+
+  mriForm.addEventListener('submit', e => {
+    e.preventDefault();
+    fb.style.display = 'block';
+    fb.textContent   = 'در حال ارسال تصویر و دریافت پاسخ…';
+    fb.className     = 'feedback';
+
+    fetch(mriForm.action, {
+      method: 'POST',
+      body: new FormData(mriForm)
+    })
+    .then(res => res.json())
+    .then(data => {
+      fb.textContent = `پیش‌بینی: ${data.prediction} (احتمال: ${(data.probability*100).toFixed(1)}%)`;
+      fb.classList.add('success');
+    })
+    .catch(err => {
+      fb.textContent = 'خطا در ارسال تصویر؛ دوباره تلاش کنید.';
+      fb.classList.add('error');
+      console.error(err);
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
+
