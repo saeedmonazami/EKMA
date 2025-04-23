@@ -11,18 +11,59 @@
       font-family: 'Vazir', sans-serif;
       color: #333;
     }
-    .container { max-width: 800px; margin: 40px auto; }
-    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px; }
-    .card-header { background: #fff; font-size: 1.25rem; font-weight: bold; color: #0056b3; text-align: center; padding: 1rem; }
-    .card-body { background: #fff; padding: 1.5rem; }
-    .form-label { font-weight: 500; color: #555; }
-    .btn-primary { background-color: #0056b3; border: none; padding: .75rem; font-size: 1.1rem; }
-    .btn-primary:hover { background-color: #004494; }
-    .feedback { display: none; margin-top: 1rem; text-align: center; padding: .75rem; border-radius: .375rem; font-weight: 500; }
-    .feedback.success { background-color: #d1e7dd; color: #0f5132; }
-    .feedback.error   { background-color: #f8d7da; color: #842029; }
-    .answer-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-    .answer-row input[type="text"] { flex: 1; }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+    .card-header {
+      background: #fff;
+      border-bottom: none;
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #0056b3;
+      text-align: center;
+      padding: 1rem;
+    }
+    .card-body {
+      background: #fff;
+      padding: 1.5rem;
+    }
+    .form-label {
+      font-weight: 500;
+      margin-bottom: .5rem;
+      color: #555;
+    }
+    .btn-primary {
+      background-color: #0056b3;
+      border: none;
+      padding: .75rem;
+      font-size: 1.1rem;
+    }
+    .btn-primary:hover {
+      background-color: #004494;
+    }
+    .feedback {
+      display: none;
+      margin-top: 1rem;
+      text-align: center;
+      padding: .75rem;
+      border-radius: .375rem;
+      font-weight: 500;
+    }
+    .feedback.success {
+      background-color: #d1e7dd;
+      color: #0f5132;
+    }
+    .feedback.error {
+      background-color: #f8d7da;
+      color: #842029;
+    }
   </style>
 </head>
 <body>
@@ -39,176 +80,77 @@
           <input id="fullName" name="fullName" type="text" class="form-control" required>
         </div>
         <div class="mb-3">
-          <label class="form-label" for="nationalId">کد ملی</label>
-          <input id="nationalId" name="nationalId" type="text" class="form-control" pattern="\d{10}" placeholder="۱۰ رقم" required>
-        </div>
-        <div class="mb-3">
           <label class="form-label" for="age">سن بیمار</label>
           <input id="age" name="age" type="number" class="form-control" min="0" required>
         </div>
       </div>
     </div>
 
-    <!-- تابع کمکی برای هر سؤال -->
-    <template id="question-template">
-      <div class="answer-row">
-        <input type="text" name="" class="form-control answer-input" placeholder="پاسخ">
-        <div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input correct-yes" type="radio" name="" value="true" required>
-            <label class="form-check-label">درست</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input correct-no" type="radio" name="" value="false">
-            <label class="form-check-label">غلط</label>
-          </div>
-        </div>
-      </div>
-    </template>
-
     <!-- آگاهی به زمان -->
     <div class="card">
       <div class="card-header">آگاهی به زمان</div>
-      <div class="card-body" id="time-questions">
-        <label class="form-label">۱. امسال چه سالی است؟</label>
-        <!-- جواب + درست/غلط -->
-        <div class="answer-row">
-          <input name="time_year" type="text" class="form-control" required>
-          <div>
-            <label class="form-check-label me-2"><input name="time_year_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="time_year_correct" type="radio" value="false"> غلط</label>
-          </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label" for="time_year">امسال چه سالی است؟</label>
+          <input id="time_year" name="time_year" type="text" class="form-control" required>
         </div>
-
-        <label class="form-label">۲. چه فصلی است؟</label>
-        <div class="answer-row">
-          <input name="time_season" type="text" class="form-control" required>
-          <div>
-            <label class="form-check-label me-2"><input name="time_season_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="time_season_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="time_season">چه فصلی است؟</label>
+          <input id="time_season" name="time_season" type="text" class="form-control" required>
         </div>
-
-        <label class="form-label">۳. چه ماهی از سال است؟</label>
-        <div class="answer-row">
-          <input name="time_month" type="text" class="form-control" required>
-          <div>
-            <label class="form-check-label me-2"><input name="time_month_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="time_month_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="time_month">چه ماهی از سال است؟</label>
+          <input id="time_month" name="time_month" type="text" class="form-control" required>
         </div>
-
-        <label class="form-label">۴. چه روزی از هفته است؟</label>
-        <div class="answer-row">
-          <input name="time_weekday" type="text" class="form-control" required>
-          <div>
-            <label class="form-check-label me-2"><input name="time_weekday_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="time_weekday_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="time_weekday">چه روزی از هفته است؟</label>
+          <input id="time_weekday" name="time_weekday" type="text" class="form-control" required>
         </div>
-
-        <label class="form-label">۵. تاریخ دقیق امروز</label>
-        <div class="answer-row">
-          <input name="time_date" type="text" class="form-control" placeholder="۱۴۰۴/۰۲/۰۱" required>
-          <div>
-            <label class="form-check-label me-2"><input name="time_date_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="time_date_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="time_date">تاریخ دقیق امروز</label>
+          <input id="time_date" name="time_date" type="text" class="form-control" placeholder="۱۴۰۴/۰۲/۰۱" required>
         </div>
       </div>
     </div>
 
-   <!-- آگاهی به مکان -->
-<div class="card">
-  <div class="card-header">آگاهی به مکان</div>
-  <div class="card-body">
-    <label class="form-label">۱. ما الان کجا هستیم؟</label>
-    <div class="answer-row">
-      <input name="place_where" type="text" class="form-control" required>
-      <div>
-        <label class="form-check-label me-2">
-          <input name="place_where_correct" type="radio" value="true" required> درست
-        </label>
-        <label class="form-check-label">
-          <input name="place_where_correct" type="radio" value="false"> غلط
-        </label>
+    <!-- آگاهی به مکان -->
+    <div class="card">
+      <div class="card-header">آگاهی به مکان</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label class="form-label" for="place_where">ما الان کجا هستیم؟</label>
+          <input id="place_where" name="place_where" type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="place_city">نام شهر/استان</label>
+          <input id="place_city" name="place_city" type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="place_country">نام کشور</label>
+          <input id="place_country" name="place_country" type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="place_hospital">نام بیمارستان/درمانگاه</label>
+          <input id="place_hospital" name="place_hospital" type="text" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="place_floor">طبقه/شماره اتاق</label>
+          <input id="place_floor" name="place_floor" type="text" class="form-control" required>
+        </div>
       </div>
     </div>
-
-    <label class="form-label">۲. نام شهر/استان</label>
-    <div class="answer-row">
-      <input name="place_city" type="text" class="form-control" required>
-      <div>
-        <label class="form-check-label me-2">
-          <input name="place_city_correct" type="radio" value="true" required> درست
-        </label>
-        <label class="form-check-label">
-          <input name="place_city_correct" type="radio" value="false"> غلط
-        </label>
-      </div>
-    </div>
-
-    <label class="form-label">۳. نام کشور</label>
-    <div class="answer-row">
-      <input name="place_country" type="text" class="form-control" required>
-      <div>
-        <label class="form-check-label me-2">
-          <input name="place_country_correct" type="radio" value="true" required> درست
-        </label>
-        <label class="form-check-label">
-          <input name="place_country_correct" type="radio" value="false"> غلط
-        </label>
-      </div>
-    </div>
-
-    <label class="form-label">۴. نام بیمارستان/درمانگاه</label>
-    <div class="answer-row">
-      <input name="place_hospital" type="text" class="form-control" required>
-      <div>
-        <label class="form-check-label me-2">
-          <input name="place_hospital_correct" type="radio" value="true" required> درست
-        </label>
-        <label class="form-check-label">
-          <input name="place_hospital_correct" type="radio" value="false"> غلط
-        </label>
-      </div>
-    </div>
-
-    <label class="form-label">۵. طبقه/شماره اتاق</label>
-    <div class="answer-row">
-      <input name="place_floor" type="text" class="form-control" required>
-      <div>
-        <label class="form-check-label me-2">
-          <input name="place_floor_correct" type="radio" value="true" required> درست
-        </label>
-        <label class="form-check-label">
-          <input name="place_floor_correct" type="radio" value="false"> غلط
-        </label>
-      </div>
-    </div>
-  </div>
-</div>
 
     <!-- توجه و محاسبه -->
     <div class="card">
       <div class="card-header">توجه و محاسبه</div>
       <div class="card-body">
-        <label class="form-label">۱. از ۱۰۰ هفت تا هفت تا کم کنید</label>
-        <div class="answer-row">
-          <input name="attention_count" type="text" class="form-control" placeholder="۱۰۰-۹۳-۸۶-…" required>
-          <div>
-            <label class="form-check-label me-2"><input name="attention_count_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="attention_count_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="attention_count">از ۱۰۰ هفت تا هفت تا کم کنید</label>
+          <input id="attention_count" name="attention_count" type="text" class="form-control" placeholder="۱۰۰-۹۳-۸۶-…" required>
         </div>
-
-        <label class="form-label">۲. «گلدان» را وارونه هجی کنید</label>
-        <div class="answer-row">
-          <input name="attention_spell" type="text" class="form-control" required>
-          <div>
-            <label class="form-check-label me-2"><input name="attention_spell_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="attention_spell_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="attention_spell">«گلدان» را وارونه هجی کنید</label>
+          <input id="attention_spell" name="attention_spell" type="text" class="form-control" required>
         </div>
       </div>
     </div>
@@ -217,13 +159,9 @@
     <div class="card">
       <div class="card-header">نوشتن جمله</div>
       <div class="card-body">
-        <label class="form-label">۱. یک جمله بنویسید</label>
-        <div class="answer-row">
-          <textarea name="write_sentence" rows="2" class="form-control" required></textarea>
-          <div>
-            <label class="form-check-label me-2"><input name="write_sentence_correct" type="radio" value="true" required> درست</label>
-            <label class="form-check-label"><input name="write_sentence_correct" type="radio" value="false"> غلط</label>
-          </div>
+        <div class="mb-3">
+          <label class="form-label" for="write_sentence">یک جمله بنویسید</label>
+          <textarea id="write_sentence" name="write_sentence" rows="3" class="form-control" required></textarea>
         </div>
       </div>
     </div>
@@ -247,8 +185,12 @@
       method: 'POST',
       body: new FormData(form)
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      return res.json();
+    })
     .then(data => {
+      // دریافت نمره و تفسیر از گره‌ی Function در n8n
       fb.textContent = `نمره MMSE: ${data.mmseScore} — تفسیر: ${data.mmseInterpretation}`;
       fb.classList.add('success');
       setTimeout(() => window.location.href = 'upload-mri.html', 1500);
