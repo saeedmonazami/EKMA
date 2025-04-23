@@ -185,11 +185,20 @@
       method: 'POST',
       body: new FormData(form)
     })
-    .then(res => res.json())
-    .then(() => {
-      fb.textContent = 'ارسال موفق! در حال انتقال به مرحله MRI…';
+    .then(res => {
+      if (!res.ok) throw new Error(`Status ${res.status}`);
+      return res.json();
+    })
+    .then(data => {
+      // دریافت نمره و تفسیر از n8n
+      const score = data.mmseScore;
+      const interp = data.mmseInterpretation;
+      fb.textContent = `نمره MMSE: ${score} — تفسیر: ${interp}`;
       fb.classList.add('success');
-      setTimeout(() => window.location.href = 'upload-mri.html', 1000);
+      // بعد از ۱.۵ ثانیه هدایت به مرحله MRI
+      setTimeout(() => {
+        window.location.href = 'upload-mri.html';
+      }, 1500);
     })
     .catch(err => {
       fb.textContent = 'خطا در ارسال؛ لطفاً دوباره تلاش کنید.';
