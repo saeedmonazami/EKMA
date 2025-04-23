@@ -190,12 +190,12 @@
       return res.json();
     })
     .then(data => {
-      // دریافت نمره و تفسیر از n8n
+      // نمایش نمره و تفسیر دریافتی از n8n
       const score = data.mmseScore;
       const interp = data.mmseInterpretation;
       fb.textContent = `نمره MMSE: ${score} — تفسیر: ${interp}`;
       fb.classList.add('success');
-      // بعد از ۱.۵ ثانیه هدایت به مرحله MRI
+      // پس از ۱.۵ ثانیه انتقال به صفحه‌ی بارگذاری MRI
       setTimeout(() => {
         window.location.href = 'upload-mri.html';
       }, 1500);
