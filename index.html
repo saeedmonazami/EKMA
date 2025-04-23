@@ -48,8 +48,213 @@
       </div>
     </div>
 
-    <!-- اینجا بقیهٔ سوالات شماست... -->
-    <!-- (همان کد موجود شما برای زمان، مکان، توجه و محاسبه، نوشتن جمله) -->
+ <!-- ۲) آگاهی به زمان -->
+    <div class="card">
+      <div class="card-header">۲) آگاهی به زمان</div>
+      <div class="card-body">
+        <div class="answer-row">
+          <div class="flex-grow-1">
+            <label class="form-label" for="time_year">سال جاری</label>
+            <select id="time_year" name="time_year" class="form-select" required>
+              <option value="">انتخاب کنید…</option>
+              <option>1400</option><option>1401</option><option>1402</option>
+              <option>1403</option><option>1404</option><option>1405</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input id="t_y_true" name="time_year_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="t_y_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="t_y_false" name="time_year_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="t_y_false">غلط</label>
+          </div>
+        </div>
+
+        <div class="answer-row">
+          <div class="flex-grow-1">
+            <label class="form-label" for="time_season">فصل</label>
+            <select id="time_season" name="time_season" class="form-select" required>
+              <option value="">انتخاب کنید…</option>
+              <option>بهار</option><option>تابستان</option><option>پاییز</option><option>زمستان</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input id="t_s_true" name="time_season_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="t_s_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="t_s_false" name="time_season_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="t_s_false">غلط</label>
+          </div>
+        </div>
+
+        <div class="answer-row">
+          <div class="flex-grow-1">
+            <label class="form-label" for="time_month">ماه</label>
+            <select id="time_month" name="time_month" class="form-select" required>
+              <option value="">انتخاب کنید…</option>
+              <option>فروردین</option><option>اردیبهشت</option><option>خرداد</option>
+              <option>تیر</option><option>مرداد</option><option>شهریور</option>
+              <option>مهر</option><option>آبان</option><option>آذر</option>
+              <option>دی</option><option>بهمن</option><option>اسفند</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input id="t_m_true" name="time_month_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="t_m_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="t_m_false" name="time_month_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="t_m_false">غلط</label>
+          </div>
+        </div>
+
+        <div class="answer-row">
+          <div class="flex-grow-1">
+            <label class="form-label" for="time_weekday">روز هفته</label>
+            <select id="time_weekday" name="time_weekday" class="form-select" required>
+              <option value="">انتخاب کنید…</option>
+              <option>شنبه</option><option>یک‌شنبه</option><option>دوشنبه</option>
+              <option>سه‌شنبه</option><option>چهارشنبه</option><option>پنج‌شنبه</option><option>جمعه</option>
+            </select>
+          </div>
+          <div class="form-check">
+            <input id="t_w_true" name="time_weekday_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="t_w_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="t_w_false" name="time_weekday_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="t_w_false">غلط</label>
+          </div>
+        </div>
+
+        <div class="answer-row">
+          <div class="flex-grow-1">
+            <label class="form-label" for="time_date">تاریخ دقیق</label>
+            <input id="time_date" name="time_date" type="text" class="form-control" placeholder="مثلاً 1404/02/01" required>
+          </div>
+          <div class="form-check">
+            <input id="t_d_true" name="time_date_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="t_d_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="t_d_false" name="time_date_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="t_d_false">غلط</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ۳) آگاهی به مکان -->
+    <div class="card">
+      <div class="card-header">۳) آگاهی به مکان</div>
+      <div class="card-body">
+        <div class="answer-row">
+          <input name="place_where" type="text" class="form-control" placeholder="ما اکنون کجا هستیم؟" required>
+          <div class="form-check">
+            <input id="p_w_true" name="place_where_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="p_w_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="p_w_false" name="place_where_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="p_w_false">غلط</label>
+          </div>
+        </div>
+        <!-- مشابه برای city, country, hospital, floor -->
+        <div class="answer-row">
+          <input name="place_city" type="text" class="form-control" placeholder="نام شهر/استان" required>
+          <div class="form-check">
+            <input id="p_c_true" name="place_city_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="p_c_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="p_c_false" name="place_city_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="p_c_false">غلط</label>
+          </div>
+        </div>
+        <div class="answer-row">
+          <input name="place_country" type="text" class="form-control" placeholder="نام کشور" required>
+          <div class="form-check">
+            <input id="p_co_true" name="place_country_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="p_co_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="p_co_false" name="place_country_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="p_co_false">غلط</label>
+          </div>
+        </div>
+        <div class="answer-row">
+          <input name="place_hospital" type="text" class="form-control" placeholder="نام بیمارستان/درمانگاه" required>
+          <div class="form-check">
+            <input id="p_h_true" name="place_hospital_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="p_h_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="p_h_false" name="place_hospital_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="p_h_false">غلط</label>
+          </div>
+        </div>
+        <div class="answer-row">
+          <input name="place_floor" type="text" class="form-control" placeholder="طبقه/شماره اتاق" required>
+          <div class="form-check">
+            <input id="p_f_true" name="place_floor_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="p_f_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="p_f_false" name="place_floor_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="p_f_false">غلط</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ۴) توجه و محاسبه -->
+    <div class="card">
+      <div class="card-header">۴) توجه و محاسبه</div>
+      <div class="card-body">
+        <div class="answer-row">
+          <input id="attention_count" name="attention_count" type="text" class="form-control" placeholder="مثلاً 100, 93, 86…" required>
+          <div class="form-check">
+            <input id="a_c_true" name="attention_count_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="a_c_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="a_c_false" name="attention_count_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="a_c_false">غلط</label>
+          </div>
+        </div>
+        <div class="answer-row">
+          <input id="attention_spell" name="attention_spell" type="text" class="form-control" placeholder="مثلاً نادلگ" required>
+          <div class="form-check">
+            <input id="a_s_true" name="attention_spell_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="a_s_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="a_s_false" name="attention_spell_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="a_s_false">غلط</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ۵) نوشتن جمله -->
+    <div class="card">
+      <div class="card-header">۵) نوشتن یک جمله</div>
+      <div class="card-body">
+        <div class="answer-row">
+          <textarea id="write_sentence" name="write_sentence" rows="3" class="form-control" placeholder="جمله خود را بنویسید…" required></textarea>
+          <div class="form-check">
+            <input id="w_s_true" name="write_sentence_correct" class="form-check-input" type="radio" value="true" required>
+            <label class="form-check-label" for="w_s_true">درست</label>
+          </div>
+          <div class="form-check">
+            <input id="w_s_false" name="write_sentence_correct" class="form-check-input" type="radio" value="false">
+            <label class="form-check-label" for="w_s_false">غلط</label>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <button type="submit" class="btn btn-primary w-100">ارسال اطلاعات</button>
     <div id="feedback" class="feedback"></div>
