@@ -64,104 +64,261 @@
       background-color: #f8d7da;
       color: #842029;
     }
+    .correctness {
+      margin-top: .5rem;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <form id="mmseForm" action="https://n8n-render-1-xacg.onrender.com/webhook/receive-patient" method="POST">
-    
-    <!-- بخش اطلاعات بیمار -->
+
+    <!-- مشخصات بیمار -->
     <div class="card">
-      <div class="card-header">اطلاعات بیمار</div>
+      <div class="card-header">مشخصات بیمار</div>
       <div class="card-body">
-        <div class="mb-3">
-          <label class="form-label" for="fullName">نام بیمار</label>
-          <input id="fullName" name="fullName" type="text" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="age">سن بیمار</label>
-          <input id="age" name="age" type="number" class="form-control" min="0" required>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="fullName">نام بیمار</label>
+            <input id="fullName" name="fullName" type="text" class="form-control" required>
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label" for="nationalId">کد ملی</label>
+            <input id="nationalId" name="nationalId" type="text" class="form-control" required pattern="\d{10}" placeholder="۱۰ رقم">
+          </div>
+          <div class="col-md-3 mb-3">
+            <label class="form-label" for="age">سن بیمار</label>
+            <input id="age" name="age" type="number" class="form-control" min="0" required>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- بخش آگاهی به زمان -->
+    <!-- آگاهی به زمان -->
     <div class="card">
       <div class="card-header">آگاهی به زمان</div>
       <div class="card-body">
+        <!-- سال -->
         <div class="mb-3">
           <label class="form-label" for="time_year">امسال چه سالی است؟</label>
-          <input id="time_year" name="time_year" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <select id="time_year" name="time_year" class="form-select me-3" required>
+              <!-- مثال: سال‌های اخیر -->
+              <option value="">انتخاب کنید</option>
+              <option>1402</option>
+              <option>1403</option>
+              <option>1404</option>
+              <option>1405</option>
+            </select>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_year" id="correct_time_year_true" value="true" required>
+                <label class="form-check-label" for="correct_time_year_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_year" id="correct_time_year_false" value="false">
+                <label class="form-check-label" for="correct_time_year_false">غلط</label>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- فصل -->
         <div class="mb-3">
           <label class="form-label" for="time_season">چه فصلی است؟</label>
-          <input id="time_season" name="time_season" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <select id="time_season" name="time_season" class="form-select me-3" required>
+              <option value="">انتخاب کنید</option>
+              <option>بهار</option>
+              <option>تابستان</option>
+              <option>پاییز</option>
+              <option>زمستان</option>
+            </select>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_season" id="correct_time_season_true" value="true" required>
+                <label class="form-check-label" for="correct_time_season_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_season" id="correct_time_season_false" value="false">
+                <label class="form-check-label" for="correct_time_season_false">غلط</label>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- ماه -->
         <div class="mb-3">
           <label class="form-label" for="time_month">چه ماهی از سال است؟</label>
-          <input id="time_month" name="time_month" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <select id="time_month" name="time_month" class="form-select me-3" required>
+              <option value="">انتخاب کنید</option>
+              <option>فروردین</option>
+              <option>اردیبهشت</option>
+              <option>خرداد</option>
+              <option>تیر</option>
+              <option>مرداد</option>
+              <option>شهریور</option>
+              <option>مهر</option>
+              <option>آبان</option>
+              <option>آذر</option>
+              <option>دی</option>
+              <option>بهمن</option>
+              <option>اسفند</option>
+            </select>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_month" id="correct_time_month_true" value="true" required>
+                <label class="form-check-label" for="correct_time_month_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_month" id="correct_time_month_false" value="false">
+                <label class="form-check-label" for="correct_time_month_false">غلط</label>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- روز هفته -->
         <div class="mb-3">
           <label class="form-label" for="time_weekday">چه روزی از هفته است؟</label>
-          <input id="time_weekday" name="time_weekday" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <select id="time_weekday" name="time_weekday" class="form-select me-3" required>
+              <option value="">انتخاب کنید</option>
+              <option>شنبه</option>
+              <option>یک‌شنبه</option>
+              <option>دوشنبه</option>
+              <option>سه‌شنبه</option>
+              <option>چهارشنبه</option>
+              <option>پنج‌شنبه</option>
+              <option>جمعه</option>
+            </select>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_weekday" id="correct_time_weekday_true" value="true" required>
+                <label class="form-check-label" for="correct_time_weekday_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_time_weekday" id="correct_time_weekday_false" value="false">
+                <label class="form-check-label" for="correct_time_weekday_false">غلط</label>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- تاریخ دقیق -->
         <div class="mb-3">
           <label class="form-label" for="time_date">تاریخ دقیق امروز</label>
-          <input id="time_date" name="time_date" type="text" class="form-control" required>
+          <input id="time_date" name="time_date" type="text" class="form-control d-inline-block w-75 me-3" placeholder="۱۴۰۴/۰۲/۰۱" required>
+          <div class="correctness d-inline-block align-middle">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_time_date" id="correct_time_date_true" value="true" required>
+              <label class="form-check-label" for="correct_time_date_true">درست</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_time_date" id="correct_time_date_false" value="false">
+              <label class="form-check-label" for="correct_time_date_false">غلط</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- بخش آگاهی به مکان -->
+    <!-- آگاهی به مکان -->
     <div class="card">
       <div class="card-header">آگاهی به مکان</div>
       <div class="card-body">
         <div class="mb-3">
           <label class="form-label" for="place_where">ما الان کجا هستیم؟</label>
-          <input id="place_where" name="place_where" type="text" class="form-control" required>
+          <input id="place_where" name="place_where" type="text" class="form-control w-75 d-inline-block me-3" required>
+          <div class="correctness d-inline-block align-middle">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_place_where" id="correct_place_where_true" value="true" required>
+              <label class="form-check-label" for="correct_place_where_true">درست</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_place_where" id="correct_place_where_false" value="false">
+              <label class="form-check-label" for="correct_place_where_false">غلط</label>
+            </div>
+          </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label" for="place_city">نام شهر/استان</label>
-          <input id="place_city" name="place_city" type="text" class="form-control" required>
+        <!-- بقیه فیلدهای مکان مشابه بالا -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="place_city">نام شهر/استان</label>
+            <input id="place_city" name="place_city" type="text" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="place_country">نام کشور</label>
+            <input id="place_country" name="place_country" type="text" class="form-control" required>
+          </div>
         </div>
-        <div class="mb-3">
-          <label class="form-label" for="place_country">نام کشور</label>
-          <input id="place_country" name="place_country" type="text" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="place_hospital">نام بیمارستان/درمانگاه</label>
-          <input id="place_hospital" name="place_hospital" type="text" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="place_floor">طبقه/شماره اتاق</label>
-          <input id="place_floor" name="place_floor" type="text" class="form-control" required>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="place_hospital">نام بیمارستان/درمانگاه</label>
+            <input id="place_hospital" name="place_hospital" type="text" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label" for="place_floor">طبقه/شماره اتاق</label>
+            <input id="place_floor" name="place_floor" type="text" class="form-control" required>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- بخش توجه و محاسبه -->
+    <!-- توجه و محاسبه -->
     <div class="card">
       <div class="card-header">توجه و محاسبه</div>
       <div class="card-body">
         <div class="mb-3">
           <label class="form-label" for="attention_count">از ۱۰۰ هفت تا هفت تا کم کنید</label>
-          <input id="attention_count" name="attention_count" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <input id="attention_count" name="attention_count" type="text" class="form-control me-3" placeholder="۱۰۰-۹۳-۸۶-…" required>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_attention_count" id="correct_attention_count_true" value="true" required>
+                <label class="form-check-label" for="correct_attention_count_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_attention_count" id="correct_attention_count_false" value="false">
+                <label class="form-check-label" for="correct_attention_count_false">غلط</label>
+              </div>
+            </div>
+          </div>  
         </div>
         <div class="mb-3">
           <label class="form-label" for="attention_spell">«گلدان» را وارونه هجی کنید</label>
-          <input id="attention_spell" name="attention_spell" type="text" class="form-control" required>
+          <div class="d-flex align-items-center">
+            <input id="attention_spell" name="attention_spell" type="text" class="form-control me-3" required>
+            <div class="correctness">
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_attention_spell" id="correct_attention_spell_true" value="true" required>
+                <label class="form-check-label" for="correct_attention_spell_true">درست</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="correct_attention_spell" id="correct_attention_spell_false" value="false">
+                <label class="form-check-label" for="correct_attention_spell_false">غلط</label>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- بخش نوشتن جمله -->
+    <!-- نوشتن جمله -->
     <div class="card">
       <div class="card-header">نوشتن جمله</div>
       <div class="card-body">
         <div class="mb-3">
           <label class="form-label" for="write_sentence">یک جمله بنویسید</label>
-          <textarea id="write_sentence" name="write_sentence" rows="3" class="form-control" required></textarea>
+          <textarea id="write_sentence" name="write_sentence" rows="3" class="form-control d-inline-block w-75 me-3" required></textarea>
+          <div class="correctness d-inline-block align-middle">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_write_sentence" id="correct_write_sentence_true" value="true" required>
+              <label class="form-check-label" for="correct_write_sentence_true">درست</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="correct_write_sentence" id="correct_write_sentence_false" value="false">
+              <label class="form-check-label" for="correct_write_sentence_false">غلط</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -170,6 +327,7 @@
     <div id="feedback" class="feedback"></div>
   </form>
 </div>
+
 
 <script>
   const form = document.getElementById('mmseForm');
@@ -186,19 +344,15 @@
       body: new FormData(form)
     })
     .then(res => {
-      if (!res.ok) throw new Error(`Status ${res.status}`);
+      if (!res.ok) throw new Error(`خطا: ${res.status}`);
       return res.json();
     })
     .then(data => {
-      // نمایش نمره و تفسیر دریافتی از n8n
       const score = data.mmseScore;
       const interp = data.mmseInterpretation;
       fb.textContent = `نمره MMSE: ${score} — تفسیر: ${interp}`;
       fb.classList.add('success');
-      // پس از ۱.۵ ثانیه انتقال به صفحه‌ی بارگذاری MRI
-      setTimeout(() => {
-        window.location.href = 'upload-mri.html';
-      }, 1500);
+      setTimeout(() => window.location.href = 'upload-mri.html', 1500);
     })
     .catch(err => {
       fb.textContent = 'خطا در ارسال؛ لطفاً دوباره تلاش کنید.';
