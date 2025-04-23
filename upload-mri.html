@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -10,6 +11,7 @@
       background: #eef2f7;
       font-family: 'Vazir', sans-serif;
       color: #333;
+      padding-bottom: 4.5rem; /* برای جا دادن منوی ثابت پایین */
     }
     .container {
       max-width: 600px;
@@ -70,6 +72,10 @@
       background-color: #f8d7da;
       color: #842029;
     }
+    /* منوی پایین */
+    .navbar {
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    }
   </style>
 </head>
 <body>
@@ -93,6 +99,15 @@
     </div>
   </div>
 </div>
+
+<!-- منوی ثابت پایین صفحه -->
+<nav class="navbar fixed-bottom navbar-light bg-white">
+  <div class="container justify-content-center">
+    <a href="chat.html" class="btn btn-outline-primary w-100">
+      دستیار پزشک هوش مصنوعی اکما
+    </a>
+  </div>
+</nav>
 
 <script>
   const mriForm = document.getElementById('mriForm');
@@ -126,7 +141,7 @@
       return res.json();
     })
     .then(data => {
-      fb.textContent = پیش‌بینی: ${data.prediction} (احتمال: ${(data.probability*100).toFixed(1)}%);
+      fb.textContent = `پیش‌بینی: ${data.prediction} (احتمال: ${(data.probability*100).toFixed(1)}%)`;
       fb.classList.add('success');
     })
     .catch(err => {
@@ -139,3 +154,4 @@
 
 </body>
 </html>
+```
