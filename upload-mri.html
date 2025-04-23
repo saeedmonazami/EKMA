@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
@@ -7,75 +6,21 @@
   <title>مرحله ۲: بارگذاری MRI</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
-      background: #eef2f7;
-      font-family: 'Vazir', sans-serif;
-      color: #333;
-      padding-bottom: 4.5rem; /* برای جا دادن منوی ثابت پایین */
-    }
-    .container {
-      max-width: 600px;
-      margin: 60px auto;
-    }
-    .card {
-      border: none;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      margin-bottom: 24px;
-    }
-    .card-header {
-      background: #fff;
-      border-bottom: none;
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #0056b3;
-      text-align: center;
-      padding: 1rem;
-    }
-    .card-body {
-      background: #fff;
-      padding: 1.5rem;
-    }
-    .form-label {
-      font-weight: 500;
-      margin-bottom: .5rem;
-      color: #555;
-    }
-    #preview {
-      max-width: 100%;
-      margin-top: .5rem;
-      border-radius: 8px;
-      display: none;
-    }
-    .btn-primary {
-      background-color: #0056b3;
-      border: none;
-      padding: .75rem;
-      font-size: 1.1rem;
-    }
-    .btn-primary:hover {
-      background-color: #004494;
-    }
-    .feedback {
-      display: none;
-      margin-top: 1rem;
-      text-align: center;
-      padding: .75rem;
-      border-radius: .375rem;
-      font-weight: 500;
-    }
-    .feedback.success {
-      background-color: #d1e7dd;
-      color: #0f5132;
-    }
-    .feedback.error {
-      background-color: #f8d7da;
-      color: #842029;
-    }
-    /* منوی پایین */
-    .navbar {
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-    }
+    body { background: #eef2f7; font-family: 'Vazir', sans-serif; color: #333; }
+    .container { max-width: 600px; margin: 60px auto; }
+    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px; }
+    .card-header { background: #fff; border-bottom: none; font-size: 1.25rem; font-weight: bold; color: #0056b3; text-align: center; padding: 1rem; }
+    .card-body { background: #fff; padding: 1.5rem; }
+    .form-label { font-weight: 500; margin-bottom: .5rem; color: #555; }
+    #preview { max-width: 100%; margin-top: .5rem; border-radius: 8px; display: none; }
+    .btn-primary, .btn-secondary { width: 100%; padding: .75rem; font-size: 1.1rem; border: none; }
+    .btn-primary { background-color: #0056b3; color: #fff; }
+    .btn-primary:hover { background-color: #004494; }
+    .btn-secondary { background-color: #6c757d; color: #fff; margin-top: .5rem; display: none; }
+    .btn-secondary:hover { background-color: #5a6268; }
+    .feedback { display: none; margin-top: 1rem; text-align: center; padding: .75rem; border-radius: .375rem; font-weight: 500; }
+    .feedback.success { background-color: #d1e7dd; color: #0f5132; }
+    .feedback.error   { background-color: #f8d7da; color: #842029; }
   </style>
 </head>
 <body>
@@ -93,39 +38,31 @@
           <input id="mriFile" name="mri" type="file" accept="image/*" class="form-control" required>
           <img id="preview" alt="پیش‌نمایش تصویر">
         </div>
-        <button type="submit" class="btn btn-primary w-100">ارسال و تحلیل</button>
+        <button type="submit" class="btn-primary">ارسال و تحلیل</button>
       </form>
       <div id="feedback" class="feedback"></div>
+      <!-- دکمه‌ی هدایت به دستیار پس از دریافت نتیجه -->
+      <button id="assistantBtn" class="btn-secondary">رفتن به دستیار پزشکی اکما</button>
     </div>
   </div>
 </div>
 
-<!-- منوی ثابت پایین صفحه -->
-<nav class="navbar fixed-bottom navbar-light bg-white">
-  <div class="container justify-content-center">
-    <a href="chat.html" class="btn btn-outline-primary w-100">
-      دستیار پزشک هوش مصنوعی اکما
-    </a>
-  </div>
-</nav>
-
 <script>
-  const mriForm = document.getElementById('mriForm');
-  const fileInput = document.getElementById('mriFile');
-  const preview   = document.getElementById('preview');
-  const fb        = document.getElementById('feedback');
+  const mriForm     = document.getElementById('mriForm');
+  const fileInput   = document.getElementById('mriFile');
+  const preview     = document.getElementById('preview');
+  const fb          = document.getElementById('feedback');
+  const assistantBtn= document.getElementById('assistantBtn');
 
-  // نمایش پیش‌نمایش تصویر
+  // نمایش پیش‌نمایش تصویر بعد انتخاب فایل
   fileInput.addEventListener('change', () => {
     const file = fileInput.files[0];
-    if (!file) {
-      preview.style.display = 'none';
-      return;
-    }
+    if (!file) return preview.style.display = 'none';
     preview.src = URL.createObjectURL(file);
     preview.style.display = 'block';
   });
 
+  // ارسال فرم MRI
   mriForm.addEventListener('submit', e => {
     e.preventDefault();
     fb.style.display = 'block';
@@ -137,12 +74,15 @@
       body: new FormData(mriForm)
     })
     .then(res => {
-      if (!res.ok) throw new Error('Network response was not ok');
+      if (!res.ok) throw new Error(`Status ${res.status}`);
       return res.json();
     })
     .then(data => {
+      // نمایش نتیجه پیش‌بینی
       fb.textContent = `پیش‌بینی: ${data.prediction} (احتمال: ${(data.probability*100).toFixed(1)}%)`;
       fb.classList.add('success');
+      // نمایش دکمه‌ی دستیار
+      assistantBtn.style.display = 'block';
     })
     .catch(err => {
       fb.textContent = 'خطا در ارسال تصویر؛ دوباره تلاش کنید.';
@@ -150,8 +90,13 @@
       console.error(err);
     });
   });
+
+  // کلیک روی دکمه‌ی دستیار
+  assistantBtn.addEventListener('click', () => {
+    // مطمئن شو assistant.html توی ریشه قرار دارد
+    window.location.href = 'assistant.html';
+  });
 </script>
 
 </body>
 </html>
-```
