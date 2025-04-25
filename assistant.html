@@ -75,16 +75,36 @@
       if (!res.ok) throw new Error(`Status ${res.status}`);
       return res.json();
     })
-    .then(data => {
-  // اگر data آرایه است، اولی را بردار
-  const msgObj = Array.isArray(data) ? data[0] : data;
-  const msg = msgObj.response || msgObj.output || '(پاسخی دریافت نشد)';
-  addMessage(msg, 'assistant');
+  .then(data => {
+  // پردازش پیشرفته‌تر پاسخ
+  let finalResponse = '(پاسخی دریافت نشد)';
+  
+  if (data) {
+    if (Array.isArray(data) && data.length > 0) {
+      finalResponse = data[0].response || data[0].output || JSON.stringify(data[0]);
+    } else if (typeof data === 'object') {
+      finalResponse = data.response || data.output || data.message || JSON.stringify(data);
+    }
+  }
+  
+  addMessage(finalResponse, 'assistant');
 })
-    .catch(err => {
-      console.error(err);
-      addMessage('خطا در ارتباط با سرور؛ لطفاً بعداً تلاش کنید.', 'assistant');
-    })
+مدیریت خطاهای پیشرفته:
+
+javascript
+.catch(err => {
+  console.error('Error details:', {
+    error: err,
+    status: err.status,
+    response: err.response
+  });
+  
+  const errorMsg = err.status === 502 ? 
+    'سرویس موقتاً در دسترس نیست' : 
+    'خطا در پردازش درخواست';
+  
+  addMessage(errorMsg, 'assistant');
+})
     .finally(() => {
       sendBtn.disabled = false;
       sendBtn.textContent = 'ارسال';
