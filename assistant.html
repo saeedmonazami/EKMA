@@ -76,12 +76,11 @@
       return res.json();
     })
     .then(data => {
-      // اگر پاسخ به صورت آرایه برمی‌گردد
-      const reply = Array.isArray(data)
-        ? (data[0].output || '(پاسخی دریافت نشد)')
-        : (data.output || '(پاسخی دریافت نشد)');
-      addMessage(reply, 'assistant');
-    })
+  // اگر data آرایه است، اولی را بردار
+  const msgObj = Array.isArray(data) ? data[0] : data;
+  const msg = msgObj.response || msgObj.output || '(پاسخی دریافت نشد)';
+  addMessage(msg, 'assistant');
+})
     .catch(err => {
       console.error(err);
       addMessage('خطا در ارتباط با سرور؛ لطفاً بعداً تلاش کنید.', 'assistant');
