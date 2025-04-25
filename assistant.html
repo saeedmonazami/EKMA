@@ -43,11 +43,9 @@
   const chatArea   = document.getElementById('chatArea');
   const chatInput  = document.getElementById('chatInput');
   const sendBtn    = document.getElementById('sendBtn');
-
-  // آدرس Webhook چت شما در n8n
+  // نشانی وب‌هوک n8n
   const chatWebhookUrl = 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
 
-  // تابع اضافه کردن پیام
   function addMessage(text, sender) {
     const wrap   = document.createElement('div');
     wrap.classList.add('message', sender);
@@ -59,16 +57,14 @@
     chatArea.scrollTop = chatArea.scrollHeight;
   }
 
-  // ارسال پیام کاربر
   sendBtn.addEventListener('click', () => {
     const text = chatInput.value.trim();
     if (!text) return;
     addMessage(text, 'user');
     chatInput.value = '';
     sendBtn.disabled = true;
-
     // نمایش اسپینر
-    sendBtn.innerHTML = 'در حال ارسال <span class="spinner-border text-light"></span>';
+    sendBtn.innerHTML = 'در حال ارسال <span class="spinner-border text-white"></span>';
 
     fetch(chatWebhookUrl, {
       method: 'POST',
@@ -80,13 +76,10 @@
       return res.json();
     })
     .then(data => {
-      // n8n با respondWith allIncomingItems یک آرایه برمی‌گرداند
-      let reply = '(پاسخی دریافت نشد)';
-      if (Array.isArray(data) && data.length) {
-        reply = data[0].output || reply;
-      } else if (data.output) {
-        reply = data.output;
-      }
+      // اگر پاسخ به صورت آرایه برمی‌گردد
+      const reply = Array.isArray(data)
+        ? (data[0].output || '(پاسخی دریافت نشد)')
+        : (data.output || '(پاسخی دریافت نشد)');
       addMessage(reply, 'assistant');
     })
     .catch(err => {
