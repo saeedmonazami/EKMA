@@ -40,11 +40,10 @@
 </div>
 
 <script>
-  const chatArea   = document.getElementById('chatArea');
-  const chatInput  = document.getElementById('chatInput');
-  const sendBtn    = document.getElementById('sendBtn');
-  // نشانی وب‌هوک n8n
-  const chatWebhookUrl = 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
+  const chatArea      = document.getElementById('chatArea');
+  const chatInput     = document.getElementById('chatInput');
+  const sendBtn       = document.getElementById('sendBtn');
+  const chatWebhookUrl= 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
 
   function addMessage(text, sender) {
     const wrap   = document.createElement('div');
@@ -63,7 +62,6 @@
     addMessage(text, 'user');
     chatInput.value = '';
     sendBtn.disabled = true;
-    // نمایش اسپینر
     sendBtn.innerHTML = 'در حال ارسال <span class="spinner-border text-white"></span>';
 
     fetch(chatWebhookUrl, {
@@ -72,46 +70,33 @@
       body: JSON.stringify({ message: text })
     })
     .then(res => {
-      if (!res.ok) throw new Error(`Status ${res.status}`);
+      if (!res.ok) throw { status: res.status, message: res.statusText };
       return res.json();
     })
-  .then(data => {
-  // پردازش پیشرفته‌تر پاسخ
-  let finalResponse = '(پاسخی دریافت نشد)';
-  
-  if (data) {
-    if (Array.isArray(data) && data.length > 0) {
-      finalResponse = data[0].response || data[0].output || JSON.stringify(data[0]);
-    } else if (typeof data === 'object') {
-      finalResponse = data.response || data.output || data.message || JSON.stringify(data);
-    }
-  }
-  
-  addMessage(finalResponse, 'assistant');
-})
-مدیریت خطاهای پیشرفته:
-
-javascript
-.catch(err => {
-  console.error('Error details:', {
-    error: err,
-    status: err.status,
-    response: err.response
-  });
-  
-  const errorMsg = err.status === 502 ? 
-    'سرویس موقتاً در دسترس نیست' : 
-    'خطا در پردازش درخواست';
-  
-  addMessage(errorMsg, 'assistant');
-})
+    .then(data => {
+      let finalResponse = '(پاسخی دریافت نشد)';
+      if (data) {
+        if (Array.isArray(data) && data.length) {
+          finalResponse = data[0].response || data[0].output || JSON.stringify(data[0]);
+        } else if (typeof data === 'object') {
+          finalResponse = data.response || data.output || data.message || JSON.stringify(data);
+        }
+      }
+      addMessage(finalResponse, 'assistant');
+    })
+    .catch(err => {
+      console.error('Error details:', err);
+      const errorMsg = err.status === 502 
+        ? 'سرویس موقتاً در دسترس نیست' 
+        : 'خطا در ارتباط با سرور؛ لطفاً بعداً تلاش کنید.';
+      addMessage(errorMsg, 'assistant');
+    })
     .finally(() => {
       sendBtn.disabled = false;
       sendBtn.textContent = 'ارسال';
     });
   });
 
-  // ارسال با Ctrl+Enter
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       sendBtn.click();
