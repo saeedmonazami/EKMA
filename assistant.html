@@ -6,54 +6,87 @@
   <title>دستیار پزشکی اکما</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* سبک‌ها مثل قبل… */
+    body { background: #eef2f7; font-family: 'Vazir', sans-serif; color: #333; }
+    .container { max-width: 700px; margin: 40px auto; }
+    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+    .card-header { background: #0056b3; color: #fff; font-size: 1.3rem; font-weight: bold; text-align: center; padding: 1rem; border-top-left-radius: 12px; border-top-right-radius: 12px; }
+    .card-body { background: #fff; padding: 1rem; height: 60vh; overflow-y: auto; }
+    .message { margin-bottom: 1rem; display: flex; }
+    .message.user { justify-content: flex-start; }
+    .message.assistant { justify-content: flex-end; }
+    .bubble { padding: .75rem 1rem; border-radius: 1rem; max-width: 75%; }
+    .bubble.user { background: #0056b3; color: #fff; border-bottom-left-radius: 0; }
+    .bubble.assistant { background: #d1e7dd; color: #0f5132; border-bottom-right-radius: 0; }
+    .input-group { margin-top: 1rem; }
+    #chatInput { resize: none; }
+    .spinner-border { width: 1rem; height: 1rem; vertical-align: text-bottom; margin-left: .5rem; }
   </style>
 </head>
 <body>
-<div class="container">  
-  <!-- کارت پیام‌ها و ورودی… -->
+
+<div class="container">
+  <div class="card">
+    <div class="card-header">دستیار پزشکی اکما</div>
+    <div id="chatArea" class="card-body">
+      <!-- پیام‌ها اینجا اضافه می‌شوند -->
+    </div>
+    <div class="p-3 border-top">
+      <div class="input-group">
+        <textarea id="chatInput" class="form-control" rows="2" placeholder="پیام خود را بنویسید..." required></textarea>
+        <button id="sendBtn" class="btn btn-primary">ارسال</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-  // ۱. هر بار صفحه لود می‌شود، sessionId را از localStorage بخوان یا بساز:
+  // ساخت یا خواندن sessionId از localStorage
   let sessionId = localStorage.getItem('sessionId');
   if (!sessionId) {
-    sessionId = crypto.randomUUID();           // اگر مرورگر از UUID پشتیبانی نداشت، می‌توانی هر رشته‌ی تصادفی دیگری بسازی
+    sessionId = Date.now().toString();
     localStorage.setItem('sessionId', sessionId);
   }
 
-  const chatArea      = document.getElementById('chatArea');
-  const chatInput     = document.getElementById('chatInput');
-  const sendBtn       = document.getElementById('sendBtn');
-  const chatWebhookUrl= 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
+  const chatArea       = document.getElementById('chatArea');
+  const chatInput      = document.getElementById('chatInput');
+  const sendBtn        = document.getElementById('sendBtn');
+  const chatWebhookUrl = 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
 
   function addMessage(text, sender) {
-    // … مثل قبل
+    const wrap   = document.createElement('div');
+    wrap.classList.add('message', sender);
+    const bubble = document.createElement('div');
+    bubble.classList.add('bubble', sender);
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    chatArea.appendChild(wrap);
+    chatArea.scrollTop = chatArea.scrollHeight;
   }
 
   sendBtn.addEventListener('click', () => {
     const text = chatInput.value.trim();
     if (!text) return;
+
+    // پیام کاربر
     addMessage(text, 'user');
     chatInput.value = '';
     sendBtn.disabled = true;
     sendBtn.innerHTML = 'در حال ارسال <span class="spinner-border text-white"></span>';
 
-    // ۲. همراهِ پیام، sessionId را هم بفرست:
+    // ارسال به Webhook با sessionId
     fetch(chatWebhookUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: text,
         sessionId: sessionId
-      }),
+      })
     })
     .then(res => {
-      if (!res.ok) throw { status: res.status };
+      if (!res.ok) throw { status: res.status, message: res.statusText };
       return res.json();
     })
     .then(data => {
-      // ۳. مثل قبل خروجی را بخوان و نمایش بده
       let finalResponse = '(پاسخی دریافت نشد)';
       if (data) {
         if (Array.isArray(data) && data.length) {
@@ -65,6 +98,7 @@
       addMessage(finalResponse, 'assistant');
     })
     .catch(err => {
+      console.error('Error details:', err);
       const errorMsg = err.status === 502
         ? 'سرویس موقتاً در دسترس نیست'
         : 'خطا در ارتباط با سرور؛ لطفاً بعداً تلاش کنید.';
@@ -76,9 +110,13 @@
     });
   });
 
+  // ارسال با Ctrl+Enter
   chatInput.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) sendBtn.click();
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      sendBtn.click();
+    }
   });
 </script>
+
 </body>
 </html>
