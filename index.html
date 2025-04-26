@@ -305,6 +305,13 @@
     window.location.href = 'upload-mri.html';
   });
 </script>
+// بعد از موفقیت ارسال MMSE
+.then(data => {
+  // ذخیره‌ی کد ملی در localStorage تا در صفحه‌ی دستیار قابل‌دسترسی باشد
+  localStorage.setItem('sessionId', document.getElementById('nationalId').value.trim());
+  // ادامه‌ی هدایت به MRI...
+  setTimeout(() => window.location.href = 'upload-mri.html', 1500);
+})
 
 </body>
 </html>
