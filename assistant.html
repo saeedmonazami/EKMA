@@ -40,7 +40,7 @@
 </div>
 
 <script>
-  // ساخت یا خواندن sessionId از localStorage
+  // 1. ساخت یا خواندن sessionId از localStorage
   let sessionId = localStorage.getItem('sessionId');
   if (!sessionId) {
     sessionId = Date.now().toString();
@@ -52,6 +52,7 @@
   const sendBtn        = document.getElementById('sendBtn');
   const chatWebhookUrl = 'https://n8n-render-1-xacg.onrender.com/webhook/ai-chat';
 
+  // 2. تابع کمکی برای افزودن پیام به صفحه
   function addMessage(text, sender) {
     const wrap   = document.createElement('div');
     wrap.classList.add('message', sender);
@@ -63,30 +64,42 @@
     chatArea.scrollTop = chatArea.scrollHeight;
   }
 
-  sendBtn.addEventListener('click', () => {
+  // 3. تابع retry برای ارسال درخواست
+  async function sendMessageWithRetry(payload, maxRetries = 3, delayMs = 1000) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const res = await fetch(chatWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        console.warn(`تلاش ${attempt} شکست خورد:`, err);
+        if (attempt < maxRetries) {
+          await new Promise(r => setTimeout(r, delayMs));
+        } else {
+          throw err;
+        }
+      }
+    }
+  }
+
+  // 4. رویداد کلیک دکمه ارسال
+  sendBtn.addEventListener('click', async () => {
     const text = chatInput.value.trim();
     if (!text) return;
 
-    // پیام کاربر
-    addMessage(text, 'user');
+    addMessage(text, 'user');          // نمایش پیام کاربر
     chatInput.value = '';
     sendBtn.disabled = true;
     sendBtn.innerHTML = 'در حال ارسال <span class="spinner-border text-white"></span>';
 
-    // ارسال به Webhook با sessionId
-    fetch(chatWebhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: text,
-        sessionId: sessionId
-      })
-    })
-    .then(res => {
-      if (!res.ok) throw { status: res.status, message: res.statusText };
-      return res.json();
-    })
-    .then(data => {
+    try {
+      // ارسال با retry و sessionId
+      const data = await sendMessageWithRetry({ message: text, sessionId });
+      // استخراج پاسخ
       let finalResponse = '(پاسخی دریافت نشد)';
       if (data) {
         if (Array.isArray(data) && data.length) {
@@ -95,22 +108,20 @@
           finalResponse = data.response || data.output || data.message || JSON.stringify(data);
         }
       }
-      addMessage(finalResponse, 'assistant');
-    })
-    .catch(err => {
-      console.error('Error details:', err);
-      const errorMsg = err.status === 502
+      addMessage(finalResponse, 'assistant');  // نمایش پاسخ دستیار
+    } catch (err) {
+      console.error('تمام تلاش‌ها شکست خورد:', err);
+      const errorMsg = err.message.includes('502')
         ? 'سرویس موقتاً در دسترس نیست'
         : 'خطا در ارتباط با سرور؛ لطفاً بعداً تلاش کنید.';
       addMessage(errorMsg, 'assistant');
-    })
-    .finally(() => {
+    } finally {
       sendBtn.disabled = false;
       sendBtn.textContent = 'ارسال';
-    });
+    }
   });
 
-  // ارسال با Ctrl+Enter
+  // 5. امکان ارسال با Ctrl+Enter
   chatInput.addEventListener('keydown', e => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       sendBtn.click();
