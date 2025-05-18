@@ -2,199 +2,110 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <title>آزمون تعاملی MMSE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>مرحله ۱: آزمون M.M.S.E</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body { background: #eef2f7; font-family: 'Vazir', sans-serif; color: #333; }
-    .container { max-width: 800px; margin: 40px auto; }
-    .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 24px; }
-    .card-header { background: #fff; font-size: 1.25rem; font-weight: bold; color: #0056b3; text-align: center; padding: 1rem; }
-    .card-body { background: #fff; padding: 1.5rem; }
-    .form-label { font-weight: 500; color: #555; }
-    .btn-primary { background-color: #0056b3; border: none; padding: .75rem; font-size: 1.1rem; }
-    .btn-primary:hover { background-color: #004494; }
-    .btn-secondary { background-color: #6c757d; border: none; padding: .75rem; font-size: 1.1rem; }
-    .btn-secondary:hover { background-color: #5a6268; }
-    .feedback { display: none; margin-top: 1rem; text-align: center; padding: .75rem; border-radius: .375rem; font-weight: 500; }
-    .feedback.success { background-color: #d1e7dd; color: #0f5132; }
-    .feedback.error   { background-color: #f8d7da; color: #842029; }
-    .answer-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-    .answer-row input[type="text"], .answer-row select, .answer-row textarea { flex: 1; }
+    body { background: #f9f9f9; font-family: 'Vazir', sans-serif; color: #333; }
+    .card { border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 30px; }
+    .card-body { padding: 2rem; text-align: center; }
+    .btn { font-size: 1.1rem; padding: .75rem 1.5rem; }
+    .step { display: none; }
+    .step.active { display: block; }
+    .question { font-size: 1.25rem; margin-bottom: 1rem; }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <form id="mmseForm" action="https://n8n-render-1-xacg.onrender.com/webhook/receive-patient" method="POST">
-
-    <!-- مشخصات بیمار -->
-    <div class="card">
-      <div class="card-header">اطلاعات بیمار</div>
-      <div class="card-body">
-        <div class="mb-3">
-          <label class="form-label" for="fullName">نام و نام خانوادگی</label>
-          <input id="fullName" name="fullName" type="text" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="nationalId">کد ملی</label>
-          <input id="nationalId" name="nationalId" type="text" class="form-control" pattern="\d{10}" placeholder="۱۰ رقم" required>
-        </div>
-        <div class="mb-3">
-          <label class="form-label" for="age">سن</label>
-          <input id="age" name="age" type="number" class="form-control" min="0" required>
-        </div>
-      </div>
+  <form id="mmseTestForm">
+    <div id="stepContainer"></div>
+    <div class="text-center mt-4">
+      <button type="button" class="btn btn-primary" id="nextBtn">سؤال بعد</button>
     </div>
-
-    <!-- ۲) آگاهی به زمان -->
-    <div class="card">
-      <div class="card-header">۲) آگاهی به زمان</div>
-      <div class="card-body">
-        <div class="answer-row">
-          <select name="time_year" class="form-select" required>
-            <option value="">سال جاری</option>
-            <option>1400</option><option>1401</option><option>1402</option>
-            <option>1403</option><option>1404</option><option>1405</option>
-          </select>
-          <label><input name="time_year_correct" type="radio" value="true" required> درست</label>
-          <label><input name="time_year_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <select name="time_season" class="form-select" required>
-            <option value="">فصل</option>
-            <option>بهار</option><option>تابستان</option><option>پاییز</option><option>زمستان</option>
-          </select>
-          <label><input name="time_season_correct" type="radio" value="true" required> درست</label>
-          <label><input name="time_season_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <select name="time_month" class="form-select" required>
-            <option value="">ماه</option>
-            <option>فروردین</option><option>اردیبهشت</option><option>خرداد</option>
-            <option>تیر</option><option>مرداد</option><option>شهریور</option>
-            <option>مهر</option><option>آبان</option><option>آذر</option>
-            <option>دی</option><option>بهمن</option><option>اسفند</option>
-          </select>
-          <label><input name="time_month_correct" type="radio" value="true" required> درست</label>
-          <label><input name="time_month_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <select name="time_weekday" class="form-select" required>
-            <option value="">روز هفته</option>
-            <option>شنبه</option><option>یک‌شنبه</option><option>دوشنبه</option>
-            <option>سه‌شنبه</option><option>چهارشنبه</option><option>پنج‌شنبه</option><option>جمعه</option>
-          </select>
-          <label><input name="time_weekday_correct" type="radio" value="true" required> درست</label>
-          <label><input name="time_weekday_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="time_date" type="text" class="form-control" placeholder="مثلاً 1404/02/01" required>
-          <label><input name="time_date_correct" type="radio" value="true" required> درست</label>
-          <label><input name="time_date_correct" type="radio" value="false"> غلط</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- ۳) آگاهی به مکان -->
-    <div class="card">
-      <div class="card-header">۳) آگاهی به مکان</div>
-      <div class="card-body">
-        <div class="answer-row">
-          <input name="place_where" type="text" class="form-control" placeholder="ما اکنون کجا هستیم؟" required>
-          <label><input name="place_where_correct" type="radio" value="true" required> درست</label>
-          <label><input name="place_where_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="place_city" type="text" class="form-control" placeholder="نام شهر/استان" required>
-          <label><input name="place_city_correct" type="radio" value="true" required> درست</label>
-          <label><input name="place_city_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="place_country" type="text" class="form-control" placeholder="نام کشور" required>
-          <label><input name="place_country_correct" type="radio" value="true" required> درست</label>
-          <label><input name="place_country_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="place_hospital" type="text" class="form-control" placeholder="نام بیمارستان/درمانگاه" required>
-          <label><input name="place_hospital_correct" type="radio" value="true" required> درست</label>
-          <label><input name="place_hospital_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="place_floor" type="text" class="form-control" placeholder="طبقه/شماره اتاق" required>
-          <label><input name="place_floor_correct" type="radio" value="true" required> درست</label>
-          <label><input name="place_floor_correct" type="radio" value="false"> غلط</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- ۴) توجه و محاسبه -->
-    <div class="card">
-      <div class="card-header">۴) توجه و محاسبه</div>
-      <div class="card-body">
-        <div class="answer-row">
-          <input name="attention_count" type="text" class="form-control" placeholder="مثلاً 100,93,86…" required>
-          <label><input name="attention_count_correct" type="radio" value="true" required> درست</label>
-          <label><input name="attention_count_correct" type="radio" value="false"> غلط</label>
-        </div>
-        <div class="answer-row">
-          <input name="attention_spell" type="text" class="form-control" placeholder="مثلاً نادلگ" required>
-          <label><input name="attention_spell_correct" type="radio" value="true" required> درست</label>
-          <label><input name="attention_spell_correct" type="radio" value="false"> غلط</label>
-        </div>
-      </div>
-    </div>
-
-    <!-- ۵) نوشتن جمله -->
-    <div class="card">
-      <div class="card-header">۵) نوشتن یک جمله</div>
-      <div class="card-body">
-        <div class="answer-row">
-          <textarea name="write_sentence" rows="2" class="form-control" placeholder="جمله خود را بنویسید…" required></textarea>
-          <label><input name="write_sentence_correct" type="radio" value="true" required> درست</label>
-          <label><input name="write_sentence_correct" type="radio" value="false"> غلط</label>
-        </div>
-      </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary w-100">ارسال اطلاعات</button>
-    <div id="feedback" class="feedback"></div>
-    <button id="gotoMriBtn" type="button" class="btn btn-secondary w-100 mt-3" style="display:none;">
-      مرحله بعد: بارگذاری MRI
-    </button>
   </form>
 </div>
 
 <script>
-  const form    = document.getElementById('mmseForm');
-  const fb      = document.getElementById('feedback');
-  const gotoBtn = document.getElementById('gotoMriBtn');
+const steps = [
+  {
+    id: 'step1',
+    question: 'امسال چه سالی است؟',
+    inputType: 'text'
+  },
+  {
+    id: 'step2',
+    question: 'چه فصلی است؟',
+    inputType: 'text'
+  },
+  {
+    id: 'step3',
+    question: 'چه ماهی از سال است؟',
+    inputType: 'text'
+  },
+  {
+    id: 'step4',
+    question: 'چه روزی از هفته است؟',
+    inputType: 'text'
+  },
+  {
+    id: 'step5',
+    question: 'تاریخ امروز را بگویید',
+    inputType: 'text'
+  },
+  {
+    id: 'step6',
+    question: 'به این سه کلمه گوش دهید و آن‌ها را به خاطر بسپارید.',
+    audio: 'audio/words.mp3',
+    inputType: 'text',
+    placeholder: 'مثلاً: سیب، سکه، میز'
+  },
+  {
+    id: 'step7',
+    question: 'لطفاً این شکل را روی کاغذ رسم کنید.',
+    image: 'images/draw-example.png',
+    inputType: null
+  },
+  {
+    id: 'step8',
+    question: 'لطفاً یک جمله بنویسید.',
+    inputType: 'textarea'
+  }
+];
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    fb.style.display = 'block';
-    fb.textContent   = 'در حال ارسال اطلاعات…';
-    fb.className     = 'feedback';
+let currentStep = 0;
+const container = document.getElementById('stepContainer');
 
-    fetch(form.action, {
-      method: 'POST',
-      body: new FormData(form),
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      fb.textContent = `نمره MMSE: ${data.mmseScore} — تفسیر: ${data.mmseInterpretation}`;
-      fb.classList.add('success');
-      gotoBtn.style.display = 'block';
-    })
-    .catch(err => {
-      fb.textContent = 'خطا در ارسال؛ لطفاً دوباره تلاش کنید.';
-      fb.classList.add('error');
-      console.error(err);
-    });
-  });
+function renderStep(index) {
+  container.innerHTML = '';
+  const step = steps[index];
+  const div = document.createElement('div');
+  div.className = 'card step active';
+  div.innerHTML = `<div class="card-body">
+    <div class="question">${step.question}</div>
+    ${step.audio ? `<audio controls autoplay><source src="${step.audio}" type="audio/mp3"></audio>` : ''}
+    ${step.image ? `<img src="${step.image}" alt="شکل" class="img-fluid my-3" style="max-width: 200px;">` : ''}
+    ${step.inputType === 'text' ? `<input type="text" class="form-control mt-3" name="${step.id}" placeholder="${step.placeholder || ''}" required>` : ''}
+    ${step.inputType === 'textarea' ? `<textarea name="${step.id}" class="form-control mt-3" rows="3" placeholder="${step.placeholder || ''}"></textarea>` : ''}
+  </div>`;
+  container.appendChild(div);
+}
+
+renderStep(currentStep);
+
+document.getElementById('nextBtn').addEventListener('click', () => {
+  if (currentStep < steps.length - 1) {
+    currentStep++;
+    renderStep(currentStep);
+  } else {
+    alert('آزمون به پایان رسید. لطفاً پاسخ‌ها را ثبت کنید.');
+  }
+});
+</script>
+
+</body>
+</html>
+
 
   gotoBtn.addEventListener('click', () => {
     window.location.href = 'upload-mri.html';
